@@ -42,7 +42,7 @@ async fn main() -> io::Result<()> {
     config.password("postgres");
     config.dbname("postgres");
     let manager = deadpool_postgres::Manager::new(config, NoTls);
-    let pool = deadpool_postgres::Pool::new(manager, 12);
+    let pool = deadpool_postgres::Pool::builder(manager).build().unwrap();
     HttpServer::new(move || {
         App::new()
             .wrap_fn(|req, service| {

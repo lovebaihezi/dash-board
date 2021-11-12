@@ -45,12 +45,12 @@ let bind = (dom, ~font_size=14, ~font_family="fira code", ()) => {
 let line_split = (line: string, max_width: float, ctx: shell): array<(float, string)> => {
   open Webapi.Canvas.Canvas2d
 
-  line->Js.String.castToArrayLike->from->reduce((prev, v) => {
-    pop(prev)
+  line->Js.String.castToArrayLike->Js.Array.from->Js.Array2.reduce((prev, v) => {
+    Js.Array.pop(prev)
     ->Belt.Option.map(last => {
       let (last_width, s) = last
       let width = v->measureText(ctx.ctx)->width
-      prev->concat(
+      prev->Js.Array2.concat(
         if last_width +. width > max_width {
           [(last_width, s), (width, v)]
         } else {
