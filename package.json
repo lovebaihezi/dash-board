@@ -1,0 +1,44 @@
+{
+  "name": "dash-board",
+  "version": "0.0.2",
+  "author": {
+    "name": "lqxc"
+  },
+  "private": "true",
+  "dependencies": {
+    "@glennsl/bs-jest": "*",
+    "@jihchi/vite-plugin-rescript": "*",
+    "@rescript/react": "*",
+    "@ryyppy/rescript-promise": "*",
+    "@testing-library/dom": "*",
+    "@testing-library/react": "*",
+    "@testing-library/react-hooks": "*",
+    "@types/jest": "*",
+    "@vitejs/plugin-react-refresh": "*",
+    "bs-fetch": "*",
+    "bs-webapi": "*",
+    "postcss": "*",
+    "postcss-flexbugs-fixes": "*",
+    "postcss-preset-env": "*",
+    "react": "*",
+    "react-dom": "*",
+    "recoil": "*",
+    "rescript": "*",
+    "rescript-dom-testing-library": "*",
+    "rescript-hooks-testing-library": "*",
+    "rescript-react-testing-library": "*",
+    "rescript-recoil": "*",
+    "tailwindcss": "*"
+  },
+  "module": "commonjs",
+  "devDependencies": {
+    "prettier": "*",
+    "vite": "*"
+  },
+  "scripts": {
+    "re:build": "rescript",
+    "re:start": "rescript build -w",
+    "vite:start": "vite",
+    "vite:build": "vite build"
+  }
+}

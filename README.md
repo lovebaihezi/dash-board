@@ -1,0 +1,3 @@
+# Dashboard
+
+self server dashboard

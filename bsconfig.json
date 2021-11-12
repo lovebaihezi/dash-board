@@ -1,0 +1,52 @@
+{
+    "name": "dash-board",
+    "version": "0.0.2",
+    "sources": [
+        {
+            "dir": "web",
+            "subdirs": true
+        },
+        {
+            "dir": "web-test",
+            "subdirs": true,
+            "type": "dev"
+        }
+    ],
+    "package-specs": [
+        {
+            "module": "es6",
+            "in-source": false,
+            "suffix": ".js"
+        },
+        {
+            "module": "commonjs",
+            "in-source": false,
+            "suffix": ".js"
+        }
+    ],
+    "suffix": ".bs.js",
+    "reason": {
+        "react-jsx": 3
+    },
+    "bs-dependencies": [
+        "@rescript/react",
+        "@ryyppy/rescript-promise",
+        "rescript-recoil",
+        "bs-fetch",
+        "bs-webapi"
+    ],
+    "bs-dev-dependencies": [
+        "rescript-react-testing-library",
+        "rescript-dom-testing-library",
+        "@glennsl/bs-jest",
+        "rescript-hooks-testing-library",
+        "@rescript/react",
+        "@ryyppy/rescript-promise",
+        "rescript-recoil",
+        "bs-fetch",
+        "bs-webapi"
+    ],
+    "bs-external-includes": [
+        "web/styles"
+    ]
+}

@@ -1,0 +1,34 @@
+#+title: dash board
+#+author: Lqxc
+* Write at begin
+    I dislike to use QQ or WeChat to transform file to print, and i want to check my server status via
+a more easier and self-config way, so i write this to feature it.
+
+** project introduction
+    /Key words/: Actix-Web, PostgreSql, Rescript, React
+    *Actix-Web*: based on Actix, a Actor Model rust project, like other Actor Model library(Akka, elixir(PL)), single thread Actor
+handle Request, an Actor won't change others state, its crash only affect itself(yes, let it crash), so Actor Model it fit for 
+Concurrent System. And the newest Actix::Main is based on Tokio(Rust Async library), use async to optimized app, async function
+speed up the whole program, and with tokio economy, PostgreSql is support with async operation. Finally, Rust will guaranteed its
+memory safety and speed with LLVM optimized and gcc support.
+    *PostgreSql*: Sql, but default Concurrent way is mutli-process not mutli-thread
+    *Rescript*: Like TypeScript, it will finally compiled to JavaScript, and with config can deicide which JS Module will compiled
+to(CMD or ESM), ML Model program language, like Rust, but more Functionally, pipe operator, pure function, immutable, sound type,
+powerful type system, pattern matching, and raw JavaScript support, and it can generate TypeScript type and can unboxed value.
+I used to use TypeScript, about 22/08/2020, but typescript its type operation not stronger enough. So I choose Rescript.
+    *React*: Data Streaming Model, State Monad. More on function, more about FP. Hook, JSX changed the way we think and write.
+
+** project structure
+    As you can see, this project start from a cargo project, and it surely contains the Cargo.toml, and
+I use Rescript to write my website so i need Node.js support.
+    1) src: Rust source code, all about server.
+    2) web: Rescript source code, all about website.
+    3) test: sbt(scala dependence manager) auto generate.
+    4) web-test: Jest, testing-library, 
+    5) project: scala Play framework generate.
+    6) app: scala Plat framework generate.
+    7) lib: rescript will compile *.res to this(with bsconfig.json)
+    8) target: scala and rust will compiled here
+    9) dist: esbuild will compile and zip JavaScript source code here
+    And to organize my project and track each change, git will help me to handel this.
+

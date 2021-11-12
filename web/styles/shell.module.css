@@ -1,0 +1,16 @@
+.shell-root {
+    width: 100%;
+    height: 100%;
+}
+
+.shell-terminal {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.shell-cursor {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
