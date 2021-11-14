@@ -47,10 +47,9 @@ async fn main() -> io::Result<()> {
         App::new()
             .wrap_fn(|req, service| {
                 let path = req.path();
-                let address = req.peer_addr().unwrap_or(SocketAddr::V4(SocketAddrV4::new(
-                    Ipv4Addr::new(0, 0, 0, 0),
-                    0,
-                )));
+                let address = req.peer_addr().unwrap_or_else(|| {
+                    SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), 0))
+                });
                 let ip = address.ip();
                 let port = address.port();
                 let method = req.method().as_str();

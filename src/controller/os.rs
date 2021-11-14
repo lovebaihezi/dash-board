@@ -81,10 +81,7 @@ async fn shell(req: HttpRequest, stream: Payload) -> Result<HttpResponse, Error>
         ws_ypixel: 10u16,
     };
     match Pty::new(&mut termios as *mut termios, &mut winsize as *mut winsize) {
-        Ok(pty) => {
-            let shell = ws::start(Shell { pty }, &req, stream);
-            shell
-        }
+        Ok(pty) => ws::start(Shell { pty }, &req, stream),
         Err(v) => {
             log(LogLevel::Error(v.to_string().as_str()));
             Ok(HttpResponse::InternalServerError()

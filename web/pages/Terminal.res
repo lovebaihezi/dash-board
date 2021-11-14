@@ -3,8 +3,8 @@ let shell = shell["default"]
 
 @react.component @genType
 let make = () => {
-  let text_element = Js.Nullable.null->React.useRef
-  let cursor_element = Js.Nullable.null->React.useRef
+  let text_element = React.useRef(Js.Nullable.null)
+  let cursor_element = React.useRef(Js.Nullable.null)
   let shell_ref = None->React.useRef
   React.useEffect0(() => {
     let s =

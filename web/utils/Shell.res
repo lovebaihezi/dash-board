@@ -63,7 +63,7 @@ let line_split = (line: string, max_width: float, ctx: shell): array<(float, str
 }
 
 // infinite recursion
-let rec write_line = (line: string, line_width: float, ctx: shell) => {
+let rec write_line = (ctx: shell, line: string, line_width: float) => {
   open Webapi.Canvas.Canvas2d
   open Js.Array2
   // BUG: infinity recursion call
@@ -84,7 +84,7 @@ let rec write_line = (line: string, line_width: float, ctx: shell) => {
   } else {
     line->line_split(ctx.window_width->Belt.Int.toFloat, ctx)->reduce((ctx, v) => {
       let (width, line) = dbg(v)
-      write_line(line, width, ctx)
+      ctx->write_line(line, width)
     }, ctx)
   }
 }
@@ -103,7 +103,7 @@ let write = (shell, code) => {
   ->String2.split("\n")
   ->map(line => (line, line->Canvas2d.measureText(shell.ctx)->Canvas2d.width))
   ->reduce((ctx, (line, width)) => {
-    line->write_line(width, ctx)
+    ctx->write_line(line, width)
   }, shell)
 }
 

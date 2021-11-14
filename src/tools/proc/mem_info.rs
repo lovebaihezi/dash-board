@@ -377,11 +377,10 @@ pub fn mem_info() -> std::io::Result<MemoInfo> {
     let mut mem_info = MemoInfo::default();
     let file_content = std::fs::read_to_string(path)?;
     file_content
-        .split("\n")
-        .map(|s| s.split(":"))
+        .split('\n')
+        .map(|s| s.split(':'))
         .map(|mut s| -> Option<(&str, &str)> { Some((s.next()?.trim(), s.next()?.trim())) })
-        .filter(|s| s.is_some())
-        .map(|s| s.unwrap())
+        .flatten()
         .for_each(|(s1, s): (&str, &str)| match s1 {
             "MemTotal" => mem_info.mem_total = BitType::new(s),
             "MemFree" => mem_info.mem_free = BitType::new(s),

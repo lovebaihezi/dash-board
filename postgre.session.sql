@@ -3,5 +3,3 @@ CREATE TABLE IF NOT EXISTS dash (
     bind BOOLEAN NOT NULL,
     levels ENUM('Administrator', 'Owner', 'Common')
 )
-INSERT INTO dash
-VALUES ()

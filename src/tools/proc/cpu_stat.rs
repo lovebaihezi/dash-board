@@ -135,7 +135,7 @@ pub struct CpuStat {
 
 #[inline]
 fn take_first(source: &str) -> Option<(u64, u64)> {
-    let mut major_disk_idk = source.split(",").map(|s| s.parse::<u64>().unwrap());
+    let mut major_disk_idk = source.split(',').map(|s| s.parse::<u64>().unwrap());
     let major = major_disk_idk.next()?;
     let disk_idk = major_disk_idk.next()?;
     Some((major, disk_idk))
@@ -143,7 +143,7 @@ fn take_first(source: &str) -> Option<(u64, u64)> {
 
 #[inline]
 fn take_last(source: &str) -> Option<(u64, u64, u64, u64, u64)> {
-    let mut fives = source.split(",").map(|s| s.parse::<u64>().unwrap());
+    let mut fives = source.split(',').map(|s| s.parse::<u64>()).flatten();
     let no_info = fives.next()?;
     let read_io_ops = fives.next()?;
     let blks_read = fives.next()?;
@@ -154,14 +154,14 @@ fn take_last(source: &str) -> Option<(u64, u64, u64, u64, u64)> {
 #[inline]
 fn take_disk_io(source: &str) -> Option<DiskIo> {
     let mut first_last = source
-        .split(":")
+        .split(':')
         .map(|s| s.trim_matches(|c| c == '(' || c == ')'));
     let first = take_first(first_last.next()?)?;
     let second = take_last(first_last.next()?)?;
     Some((first, second))
 }
 
-fn fill_field(mut stat: &mut CoreStat, s: Split<&str>) {
+fn fill_field(mut stat: &mut CoreStat, s: Split<char>) {
     let mut i = s
         .map(|s| s.trim().parse::<u64>())
         .filter(|s| s.is_ok())
@@ -180,9 +180,9 @@ fn fill_field(mut stat: &mut CoreStat, s: Split<&str>) {
 
 fn convert(source: String) -> std::io::Result<CpuStat> {
     let mut result = CpuStat::default();
-    let name_splits = source.split("\n").filter(|s| !s.is_empty()).map(
-        |s| -> (Option<&str>, std::str::Split<&str>) {
-            let mut splits = s.split(" ");
+    let name_splits = source.split('\n').filter(|s| !s.is_empty()).map(
+        |s| -> (Option<&str>, std::str::Split<char>) {
+            let mut splits = s.split(' ');
             (splits.next(), splits)
         },
     );
@@ -217,14 +217,8 @@ fn convert(source: String) -> std::io::Result<CpuStat> {
                     //     )
                     // }
                     "disk_io" => {
-                        result.disk_io = {
-                            Some({
-                                tail.map(take_disk_io)
-                                    .filter(|s| s.is_some())
-                                    .map(|s| s.unwrap())
-                                    .collect::<Vec<DiskIo>>()
-                            })
-                        }
+                        result.disk_io =
+                            Some(tail.map(take_disk_io).flatten().collect::<Vec<DiskIo>>())
                     }
                     "ctxt" => {
                         result.context_switch = Some(tail.next().unwrap().parse::<u64>().unwrap())

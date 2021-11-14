@@ -13,7 +13,7 @@ pub enum BitType {
 
 impl BitType {
     pub fn new(s: &str) -> Option<BitType> {
-        let mut name_value = s.split(" ");
+        let mut name_value = s.split(' ');
         let size = match name_value.next().unwrap().parse::<u64>() {
             Ok(v) => v,
             Err(_) => panic!("value is out of unsigned long!"),

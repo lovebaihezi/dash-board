@@ -7,7 +7,7 @@
             "subdirs": true
         },
         {
-            "dir": "web-test",
+            "dir": "test/web",
             "subdirs": true,
             "type": "dev"
         }

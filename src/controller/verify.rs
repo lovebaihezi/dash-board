@@ -30,8 +30,8 @@ struct Bind {
 async fn bing_owner(client: Data<Pool>, data: Json<Bind>) -> Result<HttpResponse, Box<dyn Error>> {
     let level = data.level.to_string();
     Ok(if check_bind(&client.get().await?, level.as_str()).await? {
-        let _token = todo!();
-        // HttpResponse::Ok().body("")
+        // let _token = todo!();
+        HttpResponse::Ok().body("")
     } else {
         HttpResponse::Forbidden().body(r#"{"info":"current level has already bind!"}"#)
     })
