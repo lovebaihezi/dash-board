@@ -1,12 +1,12 @@
 use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 
-use crate::tools::file_content_type;
+use crate::tools::get_file_type;
 
 pub fn init(ctx: &mut web::ServiceConfig) {
     ctx.service(index).service(file);
 }
 
-static PATH: &str = "./dist";
+const PATH: &str = "./dist";
 
 // TODO: get path from env?
 // TODO: make a cache?
@@ -21,6 +21,6 @@ async fn index() -> std::io::Result<HttpResponse> {
 async fn file(req: HttpRequest) -> std::io::Result<impl Responder> {
     let file_path = req.match_info().query("path").trim_start_matches("..");
     let bytes = tokio::fs::read(std::format!("{}/{}", PATH, file_path)).await?;
-    let content_type = file_content_type(file_path).unwrap_or("text/plain");
+    let content_type = get_file_type(file_path).unwrap_or("text/plain");
     Ok(HttpResponse::Ok().content_type(content_type).body(bytes))
 }

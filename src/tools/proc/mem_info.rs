@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
+use tracing::warn;
 
-use crate::tools::{
-    logger::log::{log, LogLevel},
-    BitType,
-};
+use crate::tools::BitType;
 
 #[derive(Clone, Serialize, Deserialize, Debug, Default)]
 #[allow(dead_code)]
@@ -443,11 +441,7 @@ pub fn mem_info() -> std::io::Result<MemoInfo> {
             "Precpu" => mem_info.percpu = BitType::new(s),
             "FileHugePages" => mem_info.file_huge_pages = BitType::new(s),
             "FilePmdMapped" => mem_info.file_pmd_mapped = BitType::new(s),
-            _ => {
-                log(LogLevel::Warn(
-                    std::format!("{} not support, value : {}", s1, s).as_str(),
-                ));
-            }
+            _ => warn!("{} not support, value : {}", s1, s),
         });
     Ok(mem_info)
 }

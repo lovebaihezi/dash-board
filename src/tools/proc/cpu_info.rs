@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize};
+use tracing::warn;
 
-use crate::tools::{
-    logger::log::{log, LogLevel},
-    BitType,
-};
+use crate::tools::BitType;
 
 // #[derive(Debug)]
 // pub enum CpuInfoField {
@@ -111,9 +109,7 @@ fn each_core_info_struct(core_info: String) -> CpuInfo {
             "bugs" => cpu_info.bugs = Some(value.split(' ').map(|s| s.to_string()).collect()),
             // _ => print!("[warn] !{} not support yet!", &name),
             "power_management" => cpu_info.power_management = Some(value),
-            _ => log(LogLevel::Warn(
-                std::format!("{} not support yet!", &name).as_str(),
-            )),
+            _ => warn!("{} not support yet!", &name),
         }
     }
     cpu_info

@@ -1,32 +1,25 @@
 use actix_web::{dev::Service, web::Data, App, HttpServer};
 
-use serverd::{
-    controller,
-    tools::{log, LogLevel},
-};
-use tokio_postgres::NoTls;
-
+use serverd::controller;
 use std::{
     io,
     net::{Ipv4Addr, SocketAddr, SocketAddrV4},
 };
+use tokio_postgres::NoTls;
+use tracing::info;
 
 fn config() -> (&'static str, u16) {
     let debug = cfg!(debug_assertions);
     let address_port = if debug {
-        log(LogLevel::Info("START ACTIX WEB APPLICATION IN DEBUG MOD!"));
+        info!("START ACTIX WEB APPLICATION IN DEBUG MOD!");
         ("127.0.0.1", 5050u16)
     } else {
         ("0.0.0.0", 80u16)
     };
-    log(LogLevel::Success(
-        std::format!(
-            "ACTIX SERVER LISTEN ON {} {}",
-            address_port.0,
-            address_port.1
-        )
-        .as_str(),
-    ));
+    info!(
+        "ACTIX SERVER LISTEN ON {} {}",
+        address_port.0, address_port.1
+    );
     address_port
 }
 
@@ -34,6 +27,7 @@ fn config() -> (&'static str, u16) {
 // use easiest to run it at first
 #[actix_web::main]
 async fn main() -> io::Result<()> {
+    tracing_subscriber::fmt::init();
     let address_port = config();
     let mut config = tokio_postgres::config::Config::new();
     config.host("localhost");
@@ -55,21 +49,18 @@ async fn main() -> io::Result<()> {
                 let method = req.method().as_str();
                 let info = req.headers().get("User-Agent");
                 let socket_version = req.version();
-                log(LogLevel::Info(
-                    std::format!(
-                        "{:?} [{:<8} |-> {}] {}:{} [{}]",
-                        socket_version,
-                        method,
-                        path,
-                        ip,
-                        port,
-                        match info {
-                            Some(v) => std::format!("{:?}", v),
-                            None => "none".to_string(),
-                        },
-                    )
-                    .as_str(),
-                ));
+                info!(
+                    "{:?} [{:<8} |-> {}] {}:{} [{}]",
+                    socket_version,
+                    method,
+                    path,
+                    ip,
+                    port,
+                    match info {
+                        Some(v) => std::format!("{:?}", v),
+                        None => "none".to_string(),
+                    },
+                );
                 service.call(req)
             })
             .app_data(Data::new(pool.clone()))

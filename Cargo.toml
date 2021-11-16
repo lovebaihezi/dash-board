@@ -1,8 +1,8 @@
 [package]
 name = "serverd"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["lovebaihezi <x18739168862@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -21,7 +21,7 @@ tokio-postgres = "0.7.5"
 postgres-types = "0.2.2"
 futures-util = "0.3.17"
 libc_tools = "0.1.3"
-tokio = {version = "1.12.0", features = ["full"] }
+tokio = {version = "1.13.0", features = ["full"] }
 deadpool-postgres = "0.10.0"
 deadpool-redis = "0.10.0"
 crossbeam = "0.8"
@@ -35,5 +35,6 @@ rayon = "1.5.1"
 regex = "1.5.4"
 tracing = "0.1"
 tracing-subscriber = "0.3.1"
+tracing-futures = "0.2.5"
 [dependencies.redis]
 git = "https://github.com/mitsuhiko/redis-rs.git"

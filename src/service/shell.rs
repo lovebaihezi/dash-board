@@ -3,8 +3,7 @@ use actix::{Actor, StreamHandler};
 use actix_web_actors::ws::{CloseCode, CloseReason, Message, ProtocolError, WebsocketContext};
 use libc::{c_void, read, write};
 use libc_tools::Pty;
-
-use crate::tools::{log, LogLevel};
+use tracing::info;
 
 #[derive(Debug, Message)]
 #[rtype(result = "Result<(), ()>")]
@@ -20,10 +19,10 @@ impl Drop for Shell {
 impl Actor for Shell {
     type Context = WebsocketContext<Self>;
     fn started(&mut self, _ctx: &mut Self::Context) {
-        log(LogLevel::Info("connection start"));
+        info!("connection start");
     }
     fn stopped(&mut self, _ctx: &mut Self::Context) {
-        log(LogLevel::Info("one connection is over"));
+        info!("one connection is over");
     }
 }
 

@@ -1823,7 +1823,7 @@ dependencies = [
 
 [[package]]
 name = "serverd"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "actix",
  "actix-multipart",
@@ -1853,6 +1853,7 @@ dependencies = [
  "tokio",
  "tokio-postgres",
  "tracing",
+ "tracing-futures",
  "tracing-subscriber",
 ]
 
@@ -2248,6 +2249,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f4ed65637b8390770814083d20756f87bfa2c21bf2f110babdc5438351746e4"
 dependencies = [
  "lazy_static",
+]
+
+[[package]]
+name = "tracing-futures"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "97d095ae15e245a057c8e8451bab9b3ee1e1f68e9ba2b4fbc18d0ac5237835f2"
+dependencies = [
+ "pin-project",
+ "tracing",
 ]
 
 [[package]]

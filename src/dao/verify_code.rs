@@ -87,10 +87,3 @@ pub async fn check_bind(client: &Client, level: &str) -> Result<bool, Box<dyn Er
         ))),
     }
 }
-
-#[inline]
-pub async fn update_to_bind(client: &Client) -> Result<(), Box<dyn Error>> {
-    client.query("UPDATE dash SET bind = True", &[]).await?;
-    todo!();
-    // Ok(())
-}

@@ -1,6 +1,6 @@
 use crate::{
     service::Shell,
-    tools::{cpu_info::cpu_info, cpu_stat::cpu_stat, log, mem_info::mem_info, LogLevel},
+    tools::{cpu_info::cpu_info, cpu_stat::cpu_stat, mem_info::mem_info},
 };
 use actix_web::{
     get, post,
@@ -13,6 +13,7 @@ use libc_tools::{Pty, PtyError};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::io;
+use tracing::error;
 pub fn init(ctx: &mut web::ServiceConfig) {
     ctx.service(web::scope("/os").service(proc).service(shell));
 }
@@ -83,7 +84,7 @@ async fn shell(req: HttpRequest, stream: Payload) -> Result<HttpResponse, Error>
     match Pty::new(&mut termios as *mut termios, &mut winsize as *mut winsize) {
         Ok(pty) => ws::start(Shell { pty }, &req, stream),
         Err(v) => {
-            log(LogLevel::Error(v.to_string().as_str()));
+            error!("{:?}", v);
             Ok(HttpResponse::InternalServerError()
                 .body(r#"{"info":"create pty terminal failed!}""#))
         }

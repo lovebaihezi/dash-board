@@ -5,7 +5,6 @@ use std::{
 };
 
 use hmacsha1::hmac_sha1;
-use libc::rand;
 use qrcodegen::QrCode;
 
 #[inline]
@@ -89,13 +88,11 @@ unsafe impl Draw for QrCode {
         if self.size() < 0 {
             None
         } else {
-            let mut value: Vec<u8> = Vec::new();
-            value.resize(self.size() as usize * self.size() as usize, 0);
-            let mut index = 0usize;
+            let size = self.size() * self.size();
+            let mut value: Vec<u8> = Vec::with_capacity(size as usize);
             for y in 0..self.size() {
                 for x in 0..self.size() {
-                    value[index] = if self.get_module(x, y) { 1 } else { 0 };
-                    index += 1;
+                    value.push(if self.get_module(x, y) { 1 } else { 0 });
                 }
             }
             Some(value)
@@ -105,22 +102,9 @@ unsafe impl Draw for QrCode {
 
 #[cfg(test)]
 mod verify {
-    use std::time::{SystemTime, UNIX_EPOCH};
-
-    use google_authenticator::GoogleAuthenticator;
-    use openssl::{error::ErrorStack, rand::rand_bytes};
-
     use crate::tools::crypto::crypto;
-
-    #[test]
-    #[ignore = "only ascii is allowed in verify str"]
-    fn test_rand_bytes() -> Result<(), ErrorStack> {
-        let mut buf = [0u8; 32];
-        rand_bytes(&mut buf)?;
-        assert!(buf.is_ascii());
-        Ok(())
-    }
-
+    use google_authenticator::GoogleAuthenticator;
+    use std::time::{SystemTime, UNIX_EPOCH};
     #[test]
     // #[ignore = "create qrcode to check"]
     fn crypto_is_equal_google() {
