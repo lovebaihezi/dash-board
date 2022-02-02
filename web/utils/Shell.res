@@ -49,13 +49,14 @@ let line_split = (line: string, max_width: float, ctx: shell): array<(float, str
     Js.Array.pop(prev)
     ->Belt.Option.map(last => {
       let (last_width, s) = last
-      let width = v->measureText(ctx.ctx)->width
-      prev->Js.Array2.concat(
+      let width = ctx.ctx->measureText(v)->width
+      Js.Array2.concat(
         if last_width +. width > max_width {
           [(last_width, s), (width, v)]
         } else {
           [(last_width +. width, `${s}${v}`)]
         },
+        prev,
       )
     })
     ->Belt.Option.getExn
@@ -68,7 +69,7 @@ let rec write_line = (ctx: shell, line: string, line_width: float) => {
   open Js.Array2
   // BUG: infinity recursion call
   if dbg(ctx.current_width +. line_width < ctx.window_width->Belt.Int.toFloat) {
-    line->fillText(~x=ctx.current_width, ~y=ctx.current_height, ctx.ctx)
+    ctx.ctx->fillText(~x=ctx.current_width, ~y=ctx.current_height, line, ())
     let (new_width, new_height) = if (
       ctx.current_width +. line_width < ctx.window_width->Belt.Int.toFloat
     ) {
@@ -101,7 +102,7 @@ let write = (shell, code) => {
   open Array2
   code
   ->String2.split("\n")
-  ->map(line => (line, line->Canvas2d.measureText(shell.ctx)->Canvas2d.width))
+  ->map(line => (line, shell.ctx->Canvas2d.measureText(line)->Canvas2d.width))
   ->reduce((ctx, (line, width)) => {
     ctx->write_line(line, width)
   }, shell)

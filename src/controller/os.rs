@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::io;
 use tracing::error;
+use tracing::instrument;
+
 pub fn init(ctx: &mut web::ServiceConfig) {
     ctx.service(web::scope("/os").service(proc).service(shell));
 }
@@ -32,6 +34,7 @@ struct OsInfoQuery {
 }
 
 // will accept path like {baseurl}/os/proc?info={...OsInfoType}
+#[instrument]
 #[post("/proc")]
 async fn proc(Query(OsInfoQuery { path }): Query<OsInfoQuery>) -> io::Result<impl Responder> {
     let res = HttpResponse::Ok()
@@ -48,19 +51,6 @@ async fn proc(Query(OsInfoQuery { path }): Query<OsInfoQuery>) -> io::Result<imp
 #[derive(Debug, Serialize, Deserialize)]
 struct Config {
     size: String,
-}
-
-unsafe trait ToS {
-    fn to_string(&self) -> String;
-}
-
-unsafe impl ToS for PtyError {
-    fn to_string(&self) -> String {
-        match self {
-            PtyError::CreatePtyFailed(c) => std::format!("create pty failed! {}", c),
-            PtyError::ForkFailed(c) => std::format!("pty fork failed!{}", c),
-        }
-    }
 }
 
 #[get("/shell")]

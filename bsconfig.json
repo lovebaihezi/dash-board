@@ -33,7 +33,7 @@
         "@ryyppy/rescript-promise",
         "rescript-recoil",
         "bs-fetch",
-        "bs-webapi"
+        "rescript-webapi"
     ],
     "bs-dev-dependencies": [
         "rescript-react-testing-library",
@@ -43,8 +43,8 @@
         "@rescript/react",
         "@ryyppy/rescript-promise",
         "rescript-recoil",
+        "rescript-webapi",
         "bs-fetch",
-        "bs-webapi"
     ],
     "bs-external-includes": [
         "web/styles"

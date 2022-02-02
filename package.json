@@ -16,7 +16,6 @@
     "@types/jest": "*",
     "@vitejs/plugin-react-refresh": "*",
     "bs-fetch": "*",
-    "bs-webapi": "*",
     "postcss": "*",
     "postcss-flexbugs-fixes": "*",
     "postcss-preset-env": "*",
@@ -28,6 +27,7 @@
     "rescript-hooks-testing-library": "*",
     "rescript-react-testing-library": "*",
     "rescript-recoil": "*",
+    "rescript-webapi": "^0.4.1",
     "tailwindcss": "*"
   },
   "module": "commonjs",

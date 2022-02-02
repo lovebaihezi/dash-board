@@ -10,6 +10,7 @@ const PATH: &str = "./dist";
 
 // TODO: get path from env?
 // TODO: make a cache?
+#[tracing::instrument]
 #[get("/")]
 async fn index() -> std::io::Result<HttpResponse> {
     Ok(HttpResponse::Ok()
@@ -17,6 +18,7 @@ async fn index() -> std::io::Result<HttpResponse> {
         .body(tokio::fs::read(format!("{}/{}", PATH, "index.html")).await?))
 }
 
+#[tracing::instrument]
 #[get("/{path:(assets/).*}")]
 async fn file(req: HttpRequest) -> std::io::Result<impl Responder> {
     let file_path = req.match_info().query("path").trim_start_matches("..");

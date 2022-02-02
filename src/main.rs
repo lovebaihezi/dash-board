@@ -1,11 +1,10 @@
 use actix_web::{dev::Service, web::Data, App, HttpServer};
 
-use serverd::controller;
+use dashboard::controller;
 use std::{
     io,
     net::{Ipv4Addr, SocketAddr, SocketAddrV4},
 };
-use tokio_postgres::NoTls;
 use tracing::info;
 
 fn config() -> (&'static str, u16) {
@@ -29,14 +28,6 @@ fn config() -> (&'static str, u16) {
 async fn main() -> io::Result<()> {
     tracing_subscriber::fmt::init();
     let address_port = config();
-    let mut config = tokio_postgres::config::Config::new();
-    config.host("localhost");
-    config.port(5432u16);
-    config.user("postgres");
-    config.password("postgres");
-    config.dbname("postgres");
-    let manager = deadpool_postgres::Manager::new(config, NoTls);
-    let pool = deadpool_postgres::Pool::builder(manager).build().unwrap();
     HttpServer::new(move || {
         App::new()
             .wrap_fn(|req, service| {
@@ -47,23 +38,18 @@ async fn main() -> io::Result<()> {
                 let ip = address.ip();
                 let port = address.port();
                 let method = req.method().as_str();
-                let info = req.headers().get("User-Agent");
+                let info = req
+                    .headers()
+                    .get("User-Agent")
+                    .map(|v| v.to_str().unwrap_or(""))
+                    .unwrap_or("");
                 let socket_version = req.version();
                 info!(
                     "{:?} [{:<8} |-> {}] {}:{} [{}]",
-                    socket_version,
-                    method,
-                    path,
-                    ip,
-                    port,
-                    match info {
-                        Some(v) => std::format!("{:?}", v),
-                        None => "none".to_string(),
-                    },
+                    socket_version, method, path, ip, port, info
                 );
                 service.call(req)
             })
-            .app_data(Data::new(pool.clone()))
             .configure(controller::os)
             .configure(controller::r#static)
             .configure(controller::verify)
