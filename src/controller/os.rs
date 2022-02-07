@@ -9,7 +9,7 @@ use actix_web::{
 };
 use actix_web_actors::ws;
 use libc::{termios, winsize, NCCS};
-use libc_tools::{Pty, PtyError};
+use libc_tools::Pty;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::io;
@@ -54,6 +54,7 @@ struct Config {
 }
 
 #[get("/shell")]
+#[instrument(skip(stream))]
 async fn shell(req: HttpRequest, stream: Payload) -> Result<HttpResponse, Error> {
     let mut termios = termios {
         c_iflag: 0u32,
@@ -76,7 +77,7 @@ async fn shell(req: HttpRequest, stream: Payload) -> Result<HttpResponse, Error>
         Err(v) => {
             error!("{:?}", v);
             Ok(HttpResponse::InternalServerError()
-                .body(r#"{"info":"create pty terminal failed!}""#))
+                .body(r#"{"info":"create pty terminal failed!"}"#))
         }
     }
 }

@@ -77,3 +77,4 @@ target
 /project
 
 .scalafmt.conf
+./pnpm-lock.yaml
