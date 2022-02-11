@@ -3,7 +3,7 @@ let make = () => {
   let current = Route.useRoute()
   <Recoil.RecoilRoot>
     {switch current {
-    | Home => <Terminal />
+    | Home => <Home />
     | Verify => <Verify />
     | DashBoard => <DashBoard />
     | _ => <NotFound />
