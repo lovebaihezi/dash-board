@@ -1,10 +1,10 @@
 use actix_web::{dev::Service, App, HttpServer};
-
 use dashboard::controller;
-
-use tracing_appender::{non_blocking, rolling};
-
-pub(crate) const DEBUG: bool = cfg!(debug_assertions);
+use dashboard::PgPool;
+use dashboard::DEBUG;
+use dashboard::PGSQLURL;
+use sqlx::postgres::PgPoolOptions;
+use tracing_appender::{non_blocking, rolling::daily};
 
 fn config() -> (&'static str, u16) {
     let address_port = if DEBUG {
@@ -13,7 +13,7 @@ fn config() -> (&'static str, u16) {
     } else {
         ("0.0.0.0", 80u16)
     };
-    tracing::trace!(
+    tracing::debug!(
         "ACTIX SERVER LISTEN ON {}:{}",
         address_port.0,
         address_port.1
@@ -25,12 +25,27 @@ fn config() -> (&'static str, u16) {
 // use easiest to run it at first
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let (no_block, _guard) = non_blocking(rolling::daily("/tmp", "dashboard.log"));
+    assert!(!PGSQLURL.is_empty(), "PGSQLURL enviroment var not set!");
+    let (no_block, _guard) = non_blocking(daily("/tmp", "dashboard.log"));
     if DEBUG {
-        tracing_subscriber::fmt().with_writer(no_block).init();
+        tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::DEBUG)
+            .pretty()
+            .init();
     } else {
-        tracing_subscriber::fmt().init();
+        tracing_subscriber::fmt().with_writer(no_block).init();
     }
+    let pool: PgPool = match PgPoolOptions::new().connect(PGSQLURL).await {
+        Err(err) => {
+            tracing::error!(
+                "connect to postgresql with connect url: {} failed! cause: {}",
+                PGSQLURL,
+                err
+            );
+            panic!()
+        }
+        Ok(v) => v,
+    };
     let address_port = config();
     HttpServer::new(move || {
         App::new()
@@ -57,6 +72,7 @@ async fn main() -> std::io::Result<()> {
                 );
                 service.call(req)
             })
+            .app_data(pool.clone())
             .configure(controller::os)
             .configure(controller::r#static)
             .configure(controller::verify)

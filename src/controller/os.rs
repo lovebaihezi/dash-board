@@ -37,15 +37,13 @@ struct OsInfoQuery {
 #[instrument]
 #[post("/proc")]
 async fn proc(Query(OsInfoQuery { path }): Query<OsInfoQuery>) -> io::Result<impl Responder> {
-    let res = HttpResponse::Ok()
-        .content_type("application/json")
-        .body(match path {
-            OsInfoType::CpuInfo => json!(cpu_info()?).to_string(),
-            OsInfoType::CpuStat => json!(cpu_stat()?).to_string(),
-            OsInfoType::MemInfo => json!(mem_info()?).to_string(),
-            OsInfoType::PidInfo => json!({}).to_string(),
-        });
-    Ok(res)
+    let body = match path {
+        OsInfoType::CpuInfo => json!(cpu_info()?),
+        OsInfoType::CpuStat => json!(cpu_stat()?),
+        OsInfoType::MemInfo => json!(mem_info()?),
+        OsInfoType::PidInfo => json!({}),
+    };
+    Ok(HttpResponse::Ok().content_type("application/json").json(body))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
