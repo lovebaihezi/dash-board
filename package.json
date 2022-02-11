@@ -6,7 +6,7 @@
   },
   "private": "true",
   "dependencies": {
-    "@glennsl/bs-jest": "*",
+    "@glennsl/bs-jest": "^0.7.0",
     "@jihchi/vite-plugin-rescript": "*",
     "@rescript/react": "*",
     "@ryyppy/rescript-promise": "*",
@@ -15,8 +15,9 @@
     "@testing-library/react-hooks": "*",
     "@types/jest": "*",
     "@vitejs/plugin-react-refresh": "*",
+    "autoprefixer": "^10.4.2",
     "bs-fetch": "*",
-    "postcss": "*",
+    "postcss": "^8.4.6",
     "postcss-flexbugs-fixes": "*",
     "postcss-preset-env": "*",
     "react": "*",
@@ -24,14 +25,14 @@
     "recoil": "*",
     "rescript": "*",
     "rescript-dom-testing-library": "*",
-    "rescript-hooks-testing-library": "*",
     "rescript-react-testing-library": "*",
     "rescript-recoil": "*",
-    "rescript-webapi": "^0.4.1",
-    "tailwindcss": "*"
+    "rescript-webapi": "*",
+    "tailwindcss": "^3.0.21"
   },
   "module": "commonjs",
   "devDependencies": {
+    "concurrently": "^7.0.0",
     "prettier": "*",
     "vite": "*"
   },
@@ -39,6 +40,7 @@
     "re:build": "rescript",
     "re:start": "rescript build -w",
     "vite:start": "vite",
-    "vite:build": "vite build"
+    "vite:build": "vite build",
+    "co:start": "concurrently -n rescript:start,vite:start 'pnpm run re:start' 'pnpm run vite:start' "
   }
 }

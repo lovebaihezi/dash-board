@@ -39,12 +39,11 @@
         "rescript-react-testing-library",
         "rescript-dom-testing-library",
         "@glennsl/bs-jest",
-        "rescript-hooks-testing-library",
         "@rescript/react",
         "@ryyppy/rescript-promise",
         "rescript-recoil",
         "rescript-webapi",
-        "bs-fetch",
+        "bs-fetch"
     ],
     "bs-external-includes": [
         "web/styles"
