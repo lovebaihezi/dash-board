@@ -61,7 +61,7 @@ async fn main() -> std::io::Result<()> {
                     .map(|v| v.to_str().unwrap_or(""))
                     .unwrap_or("");
                 let socket_version = req.version();
-                tracing::info!(
+                tracing::trace!(
                     "<{:?}> [{:<8}] {{{}}} |{:?}:{:?}| ({})",
                     socket_version,
                     method,
@@ -74,7 +74,6 @@ async fn main() -> std::io::Result<()> {
             })
             .app_data(pool.clone())
             .configure(controller::os)
-            .configure(controller::r#static)
             .configure(controller::verify)
     })
     .bind(address_port)?

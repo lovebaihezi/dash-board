@@ -43,7 +43,9 @@ async fn proc(Query(OsInfoQuery { path }): Query<OsInfoQuery>) -> io::Result<imp
         OsInfoType::MemInfo => json!(mem_info()?),
         OsInfoType::PidInfo => json!({}),
     };
-    Ok(HttpResponse::Ok().content_type("application/json").json(body))
+    Ok(HttpResponse::Ok()
+        .content_type("application/json")
+        .json(body))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
