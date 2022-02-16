@@ -2075,14 +2075,17 @@ dependencies = [
 [[package]]
 name = "redis"
 version = "0.21.5"
-source = "git+https://github.com/mitsuhiko/redis-rs.git#e077077d67a83499da0d806bbe8475ca0ff56921"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a80b5f38d7f5a020856a0e16e40a9cfabf88ae8f0e4c2dcd8a3114c1e470852"
 dependencies = [
  "async-trait",
  "combine",
  "dtoa",
  "itoa 0.4.8",
+ "native-tls",
  "percent-encoding",
- "sha1_smol",
+ "sha1 0.2.0",
+ "tokio-native-tls",
  "url",
 ]
 
@@ -2321,9 +2324,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.78"
+version = "1.0.79"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d23c1ba4cf0efd44be32017709280b32d1cea5c3f1275c3b6d9e8bc54f758085"
+checksum = "8e8d9fa5c3b304765ce1fd9c4c8a3de2c8db365a5b91be52f186efc675681d95"
 dependencies = [
  "indexmap",
  "itoa 1.0.1",
