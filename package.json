@@ -28,7 +28,7 @@
     "rescript-react-testing-library": "*",
     "rescript-recoil": "*",
     "rescript-webapi": "*",
-    "tailwindcss": "^3.0.21"
+    "tailwindcss": "^3.0.22"
   },
   "module": "commonjs",
   "devDependencies": {
